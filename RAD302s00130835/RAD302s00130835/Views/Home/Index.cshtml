@@ -1,0 +1,115 @@
+﻿@model IEnumerable<RAD302s00130835.Models.Customer>
+<script>
+	$(function(){
+	    $('table tr').click(function()
+	    {
+		    var id = this.id;
+		    for(var i = 0; i < 10; i ++)
+		    {
+		        $.ajax(
+                {
+
+                    Type: "GET",
+                    URL: '/api/Cust/GetOrders/' + id,
+                    contentType: "text/plain; charset-utf-8",
+                    data: id,
+                    dataType: "json",
+                    success: function (data) {
+
+                        //Old Attempt following the display mode
+                        $('#ordID' + i).empty()
+                        .append(data.id)
+                        $('#ordName' + i).empty()
+                            .append(data.name)
+                        $('#ordStreet' + i).empty()
+                            .append(data.street)
+                        $('#ordCity' + i).empty()
+                            .append(data.city)
+                        $('#ordCountry' + i).empty()
+                            .append(data.country);
+
+
+                        //$('#selectCust').SelectedCustomerID = id;
+                    }
+                });
+		    }
+		}); // end click
+	}); // end function
+</script> @*end script*@
+
+<div class=”jumbotron”>
+    <h1>RAD302 Examination Project</h1>
+    <p class=“lead”>Get Customers Orders</p>
+</div>
+
+<div class=”row”>
+
+    <div class=”col-md-4”>
+        <div class=”panel panel-primary”>
+            <div class=”panel-heading”>Customers</div>
+
+            @*Giving the table a scroll bar so it isnt endless*@
+            <div class=”panel-body” style=”overflow-x: hidden; height:500px”>
+                <table class=”table-striped table-condensed” id=”ordtbl”>
+
+                    @*Headings over the customers table*@
+                    <tr>
+                        <th>ID</th>
+                        <th>Company Name</th>
+                    </tr>
+
+                    @*Only Displaying the first 10 customers ids and names from the model*@
+
+                    @{
+                        int countCusts = 0;
+                    }
+                    
+                    @foreach (var item in Model)
+                    {
+                        countCusts++;
+                        if (countCusts <= 10)
+                        {
+                            <tr style=”cursor:pointer” id=”@item.CustomerID”>
+                                <td>@item.CustomerID</td>
+                                <td>@item.CompanyName</td>
+                            </tr>
+                        }
+                    }
+                    
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class=”col-md-6”>
+        <div class=”panel panel-primary”>
+            <div class=” panel-heading”>Customer Orders</div>
+            <div class=” panel-body”>
+                <table class=”table-striped table-condensed” id="tblOrders">
+                    @*Headings over the orders table*@
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Street</th>
+                        <th>City</th>
+                        <th>Country</th>
+                    </tr>
+
+                    
+                    
+                    countOrds++;
+                    if (countOrds <= 10)
+                    {
+                    <tr id=”ord” + countOrds>
+                        <td id="ordID" + countords></td>
+                        <td id="ordName" + countords></td>
+                        <td id="ordStreet" + countords></td>
+                        <td id="ordCity" + countords></td>
+                        <td id="ordCountry" + countords></td>
+                    </tr>
+                    }
+            
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
